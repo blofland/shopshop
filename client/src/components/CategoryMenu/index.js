@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import {useEffect} from 'react'
 import { useQuery } from '@apollo/client';
-import { useStoreContext } from '../../utils/GlobalState';
-import { UPDATE_CATEGORIES, UPDATE_CURRENT_CATEGORY } from '../../utils/actions';
 import { QUERY_CATEGORIES } from '../../utils/queries';
+import {useStoreContext} from '../../utils/GlobalState'
+import { UPDATE_CATEGORIES, UPDATE_CURRENT_CATEGORY } from '../../utils/actions'
 
-function CategoryMenu() {
+function CategoryMenu({ setCategory }) {
   const [state, dispatch] = useStoreContext();
 
   const { categories } = state;
-
   const { data: categoryData } = useQuery(QUERY_CATEGORIES);
 
   useEffect(() => {
@@ -18,23 +18,16 @@ function CategoryMenu() {
         categories: categoryData.categories
       });
     }
-  }, [categoryData, dispatch]);
-
-  const handleClick = id => {
-    dispatch({
-      type: UPDATE_CURRENT_CATEGORY,
-      currentCategory: id
-    });
-  };
+  }, [categoryData, dispatch])
 
   return (
     <div>
       <h2>Choose a Category:</h2>
-      {categories.map(item => (
+      {categories.map((item) => (
         <button
           key={item._id}
           onClick={() => {
-            handleClick(item._id);
+            setCategory(item._id);
           }}
         >
           {item.name}
